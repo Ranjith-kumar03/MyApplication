@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_logout_btn"
+        android:title="Logout" />
+    <item
+        android:id="@+id/main_account_setting_btn"
+        android:title="Account Setting" />
+    <item
+        android:id="@+id/main_alluser_btn"
+        android:title="All Users" />
+    <item
+        android:id="@+id/media_route_menu_item"
+        android:title="Cast"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        tools:icon="@drawable/mr_button_light" />
+</menu>

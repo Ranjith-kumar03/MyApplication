@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "553269357498",
+    "firebase_url": "https://myapplication-ccf69.firebaseio.com",
+    "project_id": "myapplication-ccf69",
+    "storage_bucket": "myapplication-ccf69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553269357498:android:25fbb1ad2b4dd47f",
+        "android_client_info": {
+          "package_name": "tk.onlinesilkstore.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553269357498-eeinfl6kn7htmgejgqaoimmbuqe8cvv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tk.onlinesilkstore.myapplication",
+            "certificate_hash": "24303b04ed99299442839be6ddd20ab9cdbfca1e"
+          }
+        },
+        {
+          "client_id": "553269357498-t84f76ef7vjn0ol6qjh6sh27c1s18uvo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv4kuCKGR_wjYng9fe18r9eNtzmDa36uk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553269357498-t84f76ef7vjn0ol6qjh6sh27c1s18uvo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
