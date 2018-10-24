@@ -2,6 +2,7 @@ package tk.onlinesilkstore.myapplication;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +30,12 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
@@ -40,6 +46,8 @@ public class SettingActivity extends AppCompatActivity {
     private static final int GALLERY_PICK=1;
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
+    //Tnump Image
+    private Bitmap thump_bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +55,7 @@ public class SettingActivity extends AppCompatActivity {
         mCircleImageView=findViewById(R.id.setting_image);
         mSettingName=findViewById(R.id.setting_display_name);
         mStatus=findViewById(R.id.setting_display_status);
-         mStatusBtn=findViewById(R.id.setting_change_status_btn);
+        mStatusBtn=findViewById(R.id.setting_change_status_btn);
         mImageBtn=findViewById(R.id.setting_changeimage_btn);
         mImageStorage=FirebaseStorage.getInstance().getReference();
         mCurrentuser=FirebaseAuth.getInstance().getCurrentUser();
@@ -65,7 +73,10 @@ public class SettingActivity extends AppCompatActivity {
                 mSettingName.setText(name);
                 mStatus.setText(status);
 
-                Picasso.get().load(image).into(mCircleImageView);
+                if(!image.equals("default")) {
+
+                    Picasso.get().load(image).placeholder(R.drawable.silkyadaah).into(mCircleImageView);
+                }
             }
 
             @Override
@@ -102,17 +113,35 @@ public class SettingActivity extends AppCompatActivity {
 
         if(requestCode==GALLERY_PICK && resultCode==RESULT_OK)
         {
-         Uri imageUri=data.getData();
+            Uri imageUri=data.getData();
             CropImage.activity(imageUri)
                     .setAspectRatio(1,1)
                     .start(SettingActivity.this);
-         }
+        }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 final String current_user_uid=mCurrentuser.getUid();
                 Uri resultUri = result.getUri();
+
+                //Thumb image
+                File thump_filepath=new File(resultUri.getPath());
+                try {
+                    thump_bitmap = new Compressor(this)
+                            .setQuality(75)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .compressToBitmap(thump_filepath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thump_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] thump_byte = baos.toByteArray();
+
+
                 mProgressDialog=new ProgressDialog(SettingActivity.this);
                 mProgressDialog.setTitle("Uploading Image....");
                 mProgressDialog.setMessage("Please wait while we upload image");
@@ -149,7 +178,54 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                StorageReference thump_storage_filepath=mImageStorage.child("profile_images").child("thumbs").child(current_user_uid+".jpg");
+
+                UploadTask uploadTask = thump_storage_filepath.putBytes(thump_byte);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                        if(task.isSuccessful())
+                        {
+                            mImageStorage.child("profile_images").child("thumbs").child(current_user_uid+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    String Thumb_uri=uri.toString();
+                                    mDatabase.child("thump_image").setValue(Thumb_uri).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if(task.isSuccessful())
+                                            {
+                                                mProgressDialog.dismiss();
+                                                Toast.makeText(SettingActivity.this, "Sucess uploading Thumb uri Link", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else
+                                            {
+                                                Toast.makeText(SettingActivity.this, "Failed uploading Thumb uri Link", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+                                }
+                            });
+
+                        }else
+                        {
+                            Toast.makeText(SettingActivity.this, "Thump Image upload not Working", Toast.LENGTH_SHORT).show();
+                            mProgressDialog.dismiss();
+                        }
+
+                    }
+                });
+
+
+
             }
+
+
             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

@@ -76,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(setting_intent);
                 return  true;
             case R.id.main_alluser_btn:
+                Intent Allusers_intent=new Intent(MainActivity.this,AllUsers_Activity.class);
+                startActivity(Allusers_intent);
                 return  true;
+
                 default:
                     return super.onOptionsItemSelected(item);
         }

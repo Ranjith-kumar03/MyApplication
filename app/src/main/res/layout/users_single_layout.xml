@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/colorAlluserbackground">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/silkyadaah" android:id="@+id/singleuser_display"/>
+
+    <TextView
+        android:id="@+id/displayname_alluser"
+        android:layout_width="wrap_content"
+        android:layout_height="31dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPurple"
+        android:gravity="center"
+        android:text="Display Name"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/display_status_allusers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorAccent"
+        android:text="Status"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="15sp" />
+
+</RelativeLayout>
